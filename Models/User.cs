@@ -5,6 +5,6 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public List<Mission> Missions { get; set; }
+        public List<Mission> Missions { get; set; } = new List<Mission>();
     }
 }

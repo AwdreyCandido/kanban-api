@@ -1,26 +1,25 @@
-﻿using Api.Interfaces;
+﻿using Api.Data;
+using Api.Interfaces;
 using Api.Models;
 
 namespace Api.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        // Injetar dependência do Banco de dados
-        public UserRepository()
+        private readonly AppDbContext _context;
+
+        public UserRepository(AppDbContext context)
         {
+            _context = context;
         }
 
-        public void CreateUser(User user)
+        public async void CreateUser(User user)
         {
-            throw new NotImplementedException();
+           // user = new User { Id = 1, Name = "Nome", Email = "email@email.com", Missions = []};
+            
         }
 
         public void DeleteUser(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public User GetUser(int id)
         {
             throw new NotImplementedException();
         }
@@ -29,5 +28,11 @@ namespace Api.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public Task<User> GetUser(int id)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

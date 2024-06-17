@@ -4,10 +4,10 @@ namespace Api.Interfaces
 {
     public interface IMissionRepository
     {
-        public void CreateMission(Mission task);
-        public void UpdateMission(int id, Mission task);
-        public void DeleteMission(int id);
-        public Mission GetMission(int id);
-        public List<Mission> GetAllMissions();
+        void CreateMission(Mission task);
+        void UpdateMission(int id, Mission task);
+        void DeleteMission(int id);
+        Task<Mission> GetMission(int id);
+        Task<List<Mission>> GetAllMissions();
     }
 }

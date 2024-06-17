@@ -4,9 +4,9 @@ namespace Api.Interfaces
 {
     public interface IUserRepository
     {
-        public void CreateUser(User user);
-        public void UpdateUser(int id, User user);
-        public void DeleteUser(int id);
-        public User GetUser(int id);
+        void CreateUser(User user);
+        void UpdateUser(int id, User user);
+        void DeleteUser(int id);
+        Task<User> GetUser(int id);
     }
 }
