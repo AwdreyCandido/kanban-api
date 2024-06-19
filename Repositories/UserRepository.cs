@@ -1,6 +1,9 @@
 ﻿using Api.Data;
+using Api.DTOs;
 using Api.Interfaces;
 using Api.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Repositories
 {
@@ -13,25 +16,46 @@ namespace Api.Repositories
             _context = context;
         }
 
-        public async void CreateUser(User user)
+        public async Task<User>  CreateUser(UserDTO user)
         {
-           // user = new User { Id = 1, Name = "Nome", Email = "email@email.com", Missions = []};
+            // VALIDATION
+
+            var newUser = new User { 
+                Name = user.Name,
+                Email = user.Email 
+            };
             
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync(); 
+
+            return newUser;
         }
 
-        public void DeleteUser(int id)
+        public async Task<User> UpdateUser(int id, UserDTO updateUser)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FindAsync(id);
+
+            user.Name = updateUser.Name;
+            user.Email = updateUser.Email;
+
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            
+            return user;
         }
 
-        public void UpdateUser(int id, User user)
+        public async void DeleteUser(int id)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FindAsync(id);
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync(); 
         }
 
-        public Task<User> GetUser(int id)
+        public async Task<User> GetUser(int id)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FindAsync(id);
+            return user;
         }
 
     }

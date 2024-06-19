@@ -1,4 +1,7 @@
 using Api.Data;
+using Api.Interfaces;
+using Api.Middleware;
+using Api.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +19,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+// DI
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
