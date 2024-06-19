@@ -1,6 +1,9 @@
 ﻿using Api.Data;
+using Api.DTOs;
+using Api.Enums;
 using Api.Interfaces;
 using Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Repositories
 {
@@ -14,31 +17,66 @@ namespace Api.Repositories
             _context = context;
         }
 
-        public void CreateMission(Mission task)
+        public async Task<Mission> GetMission(int id)
         {
-            throw new NotImplementedException();
+            var mission  = await _context.Missions.FindAsync(id);
+
+            if(mission == null)
+            {
+                throw new KeyNotFoundException("Mission doesn't exist!");
+            }
+
+            return mission;
         }
 
-        public void UpdateMission(int id, Mission task)
+        public async Task CreateMission(MissionDTO mission)
         {
-            throw new NotImplementedException();
+            // MORE VALIDATION
+            var newMission = new Mission
+            {
+                Title = mission.Title,
+                Description = mission.Description,
+                UserId = mission.UserId,
+                Status = (Status)mission.Status,
+            };
+
+            _context.Missions.Add(newMission);
+            await _context.SaveChangesAsync();
         }
 
-        public void DeleteMission(int id)
+        public async Task UpdateMission(int id, MissionDTO mission)
         {
-            throw new NotImplementedException();
+            var newMission = await _context.Missions.FindAsync(id);
+
+            if(newMission != null)
+            {
+                throw new KeyNotFoundException("Mission not found!");
+            }
+
+            newMission.Title = mission.Title;
+            newMission.Description = mission.Description;
+            newMission.Status = (Status)mission.Status;
+            newMission.UpdatedAt = DateTime.Now;
+
+
+            // _context.Missions.Entry(newMission).State = EntityState.Modified;
+            _context.Missions.Update(newMission);
+            await _context.SaveChangesAsync();
+
         }
 
-        public Task<List<Mission>> GetAllMissions()
+        public async Task DeleteMission(int id)
         {
-            throw new NotImplementedException();
-        }
+            var mission = await _context.Missions.FindAsync(id);
 
-        public Task<Mission> GetMission(int id)
-        {
-            throw new NotImplementedException();
-        }
+            if (mission == null)
+            {
+                throw new KeyNotFoundException("Mission not found!");
+            }
 
+            _context.Missions.Remove(mission);
+            await _context.SaveChangesAsync();
+        }
 
     }
 }
